@@ -4,6 +4,10 @@ End-to-end machine learning project that predicts a patient's **cancer risk leve
 
 The final model is a **class-weighted XGBoost** classifier, hyperparameter-tuned with **Optuna**, and deployed via a **Streamlit** web app (batch CSV upload + single-patient manual input).
 
+## Live Demo
+
+🔗 [Click here to try the app](https://cancerriskprediction-mbfmaw6u5fnr3c8bvznet7.streamlit.app/)
+
 ---
 
 ## Problem
