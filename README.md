@@ -34,3 +34,65 @@ File: `cancer-risk-factors.csv`
 | High       | 102   |
 
 **Features used by the model:**
+Age, Gender, Smoking, Alcohol_Use, Obesity, Family_History,
+Diet_Red_Meat, Diet_Salted_Processed, Fruit_Veg_Intake,
+Physical_Activity, Air_Pollution, Occupational_Hazards,
+BRCA_Mutation, H_Pylori_Infection, Calcium_Intake,
+BMI, Physical_Activity_Level
+
+
+**Excluded columns (and why):**
+- `Patient_ID` — identifier only
+- `Cancer_Type` — outcome-like grouping; including it would let the model “cheat”
+- `Overall_Risk_Score` — derived score that leaks target information
+
+---
+
+## Approach
+
+1. **Baseline models** — Random Forest, Logistic Regression, Decision Tree
+2. **Imbalance handling** — class weights (inverse frequency) and experiments with SMOTE
+3. **Final model** — XGBoost with sample weights + Optuna hyperparameter search (macro-F1 / High-class recall focus)
+4. **Persistence** — model, label encoder, and feature list saved as `.pkl`
+5. **Deployment** — Streamlit app for interactive and batch prediction
+
+### Final model highlights
+
+- Algorithm: XGBoost (`multi:softmax`)
+- Handling of imbalance: class weights
+- Tuning: Optuna (TPE sampler)
+- Output: risk class + class probabilities
+
+Example metrics from a class-weighted run (test set, n=400):
+
+| Class  | Precision | Recall | F1-score |
+|--------|-----------|--------|----------|
+| High   | 0.21      | 0.75   | 0.33     |
+| Low    | 0.42      | 0.82   | 0.56     |
+| Medium | 0.92      | 0.59   | 0.72     |
+| **Macro avg** | 0.52 | **0.72** | 0.54 |
+
+*(High-class recall was deliberately prioritised so fewer high-risk patients are missed.)*
+
+---
+
+## Project structure
+.
+├── Cancer_Risk_Prediction_(ML).ipynb   # Full modeling notebook
+├──                                     # EDA File
+├── cancer-risk-factors.csv             # Dataset
+├── final_xgb_class_weighted.pkl        # Trained model
+├── label_encoder.pkl                   # LabelEncoder for Risk_Level
+├── feature_names.pkl                   # Ordered list of feature columns
+├── app.py                              # Streamlit web app
+├── requirements.txt                    # Dependencies
+└── README.md
+
+
+### Future improvements
+
+Collect a larger / more balanced real-world dataset
+Add calibration of probability estimates
+Explore cost-sensitive learning or threshold tuning for High class
+Deploy as a REST API (FastAPI) in addition to Streamlit
+Feature importance / SHAP explanations in the UI
