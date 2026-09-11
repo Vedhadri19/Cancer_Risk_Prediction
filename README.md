@@ -76,19 +76,6 @@ Example metrics from a class-weighted run (test set, n=400):
 
 ---
 
-## Project structure
-.
-├── Cancer_Risk_Prediction_(ML).ipynb   # Full modeling notebook
-├──                                     # EDA File
-├── cancer-risk-factors.csv             # Dataset
-├── final_xgb_class_weighted.pkl        # Trained model
-├── label_encoder.pkl                   # LabelEncoder for Risk_Level
-├── feature_names.pkl                   # Ordered list of feature columns
-├── app.py                              # Streamlit web app
-├── requirements.txt                    # Dependencies
-└── README.md
-
-
 ### Future improvements
 
 Collect a larger / more balanced real-world dataset
